@@ -3,6 +3,8 @@ const mustache = require('mustache-express');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const flash = require('express-flash');
+const cors = require('cors');
+const bodyParser = require('body-parser');
 
 const { user } = require('./models/database');
 
@@ -16,6 +18,8 @@ require('dotenv').config({path:'variables.env'});
 const app = express();
 
 //Express
+app.use(cors());
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(express.static(__dirname+'/public'));
