@@ -6,6 +6,7 @@ const apiController = require('../controllers/apiController');
 const router = express.Router();
 router.get('/', homeController.index);
 router.get('/templates', homeController.templates);
+router.post('/templates', homeController.templatesAction);
 router.get('/responses', homeController.responses);
 router.get('/grades', homeController.grades);
 router.get('/approved', homeController.approved);
