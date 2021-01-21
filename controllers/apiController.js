@@ -38,25 +38,42 @@ exports.templatesInsert = async (req, res) => {
 
 }
 
-exports.templatesEdit = (req, res) => {
+exports.templatesEdit = async (req, res) => {
     let reqID = req.params.id
-    let reqName = req.body.name;
-    let reqClass = req.body.class;
-    let reqAnswers = req.body.answers;
+    const result = await template.find({id: reqID});
+    
+    if(result.length > 0) {
+        let reqName = result[0].name;
+        let reqClass = result[0].class;
+        let reqAnswers = result[0].answers;
 
-    if(reqID && reqName && reqClass && reqAnswers) {
-        try {
-            template.updateOne({id:reqID}, {$set: { name:reqName, class:reqClass, answers:reqAnswers }}, {upsert: true}, function(err){});
-        } catch {
-            res.json({error: true, type: 'Cannot update database'});
+
+        if(req.body.name) {
+            reqName = req.body.name;
+        }
+        if(req.body.class) {
+            reqClass = req.body.class;
+        }
+        if(req.body.answers) {
+            reqAnswers = req.body.answers;
+        }
+
+        if(reqID) {
+            try {
+                template.updateOne({id:reqID}, {$set: { name:reqName, class:reqClass, answers:reqAnswers }}, {upsert: true}, function(err){});
+            } catch {
+                res.json({error: true, type: 'Cannot update database'});
+                return;
+            }
+        } else {
+            res.json({error: true, type:'Invalid requirements'});
             return;
         }
-    } else {
-        res.json({error: true, type:'Invalid requirements'});
-        return;
-    }
 
-    res.json({error: false, type:'sucess'});
+        res.json({error: false, type:'sucess'});
+    } else {
+        res.json({error: true, type:'Data not found'});
+    }
 }
 
 exports.templatesDelete = async (req, res) => {

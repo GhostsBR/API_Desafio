@@ -16,7 +16,7 @@ exports.templates = async (req, res) => {
 }
 
 exports.templatesAction = async (req, res) => {
-    if(req.body.name && req.body.class && req.body.answers) {
+    if(req.body.name && req.body.class && req.body.answers && !req.body.remove && !req.body.edit) {
         try {
             await fetch('http://localhost:30/api/templates/insert', {
             method: 'post',
@@ -43,13 +43,30 @@ exports.templatesAction = async (req, res) => {
         } catch {
             req.flash('error', 'Não foi possível remover o gabarito, tente novamente mais tarde!');
             res.redirect('/templates');
+            return;
         }
 
         req.flash('success', 'Gabarito removido com sucesso!');
         res.redirect('/templates');
         
     } else if(req.body.edit) {
+        const id = req.body.edit
+        
+        try{
+            await fetch(`http://localhost:30/api/templates/edit/${id}`, {
+            method: 'put',
+            body:    JSON.stringify(req.body),
+            headers: { 'Content-Type': 'application/json' },
+            })
+        } catch {
+            req.flash('error', 'Não foi possível remover o gabarito, tente novamente mais tarde!');
+            res.redirect('/templates');
+            return;
+        }
 
+        req.flash('success', 'Gabarito alterado com sucesso!');
+        res.redirect('/templates');
+        
     }
 }
 
