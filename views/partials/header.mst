@@ -30,7 +30,7 @@
             </div>
             {{#flashes}}
                 {{#success}}
-                    <div class="container-fluid" style="position: absolute;">
+                    <div class="container-fluid">
                         <div class="alert alert-success alert-dismissible fade show">
                             {{.}}
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -40,7 +40,7 @@
                     </div>
                 {{/success}}
                 {{#warning}}
-                    <div class="container-fluid" style="position: absolute;">
+                    <div class="container-fluid">
                         <div class="alert alert-warning alert-dismissible fade show">
                             {{.}}
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -50,7 +50,7 @@
                     </div>
                 {{/warning}}
                 {{#info}}
-                    <div class="container-fluid" style="position: absolute;">
+                    <div class="container-fluid">
                         <div class="alert alert-secondary alert-dismissible fade show">
                             {{.}}
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -60,7 +60,7 @@
                     </div>
                 {{/info}}
                 {{#error}}
-                    <div class="container-fluid" style="position: absolute;">
+                    <div class="container-fluid">
                         <div class="alert alert-danger alert-dismissible fade show">
                             {{.}}
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">

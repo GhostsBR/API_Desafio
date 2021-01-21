@@ -59,8 +59,20 @@ exports.templatesEdit = (req, res) => {
     res.json({error: false, type:'sucess'});
 }
 
-exports.templatesDelete = (req, res) => {
-    
+exports.templatesDelete = async (req, res) => {
+    const id = req.params.id
+    if(id) {
+        try {
+            await template.deleteOne({id}, function (err) {});
+        } catch {
+            res.json({error: true, type:'Cannot remove into database'});
+            return;
+        }
+    } else {
+        res.json({error: true, type:'Invalid requirements'});
+        return;
+    }
+    res.json({error: false, type:'sucess'});
 }
 
 exports.responses = async (req, res) => {
