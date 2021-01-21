@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{{errorType}} - {{h.defaultPageTitle}}</title>
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet"/>
+        <link rel="stylesheet" href="assets/css/error.css" />
+    </head>
+    <body>
+        <div class="errorSpace">
+            <div class="errorBox">
+                {{#img}}
+                    <img src="{{img.url}}" alt="{{img.alt}}" height="{{img.height}}">
+                {{/img}}
+                {{#title}}
+                    <div class="errorTitle">{{title}}</div>
+                {{/title}}
+                {{#description}}
+                    <div class="errorDescription">{{description}}</div>
+                {{/description}}
+            </div>
+        </div>
+    </body>
+</html>

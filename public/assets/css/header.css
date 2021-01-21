@@ -1,0 +1,18 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    margin: 0;
+    background-color: #212529;
+}
+
+.nav-link {
+    color: #fdfcfa;
+    font-weight:600;
+}
+
+.nav-link:hover {
+    color: #f8c11d;
+}
