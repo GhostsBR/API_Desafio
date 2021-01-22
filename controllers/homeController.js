@@ -1,4 +1,5 @@
 const fetch = require('node-fetch');
+require('dotenv').config({path:'variables.env'});
 
 exports.index = (req, res) => {
     res.render('home');
@@ -9,7 +10,7 @@ exports.templates = async (req, res) => {
         templates:[]
     }
     
-    await fetch('http://localhost:30/api/templates')
+    await fetch(`${process.env.URL}/api/templates`)
     .then(async res => templatesJson.templates = await res.json());
 
     res.render('templates', templatesJson);
@@ -18,7 +19,7 @@ exports.templates = async (req, res) => {
 exports.templatesAction = async (req, res) => {
     if(req.body.name && req.body.class && req.body.answers && !req.body.remove && !req.body.edit) {
         try {
-            await fetch('http://localhost:30/api/templates/insert', {
+            await fetch(`${process.env.URL}/api/templates`, {
             method: 'post',
             body:    JSON.stringify(req.body),
             headers: { 'Content-Type': 'application/json' },
@@ -35,7 +36,7 @@ exports.templatesAction = async (req, res) => {
         const id = req.body.remove
         
         try{
-            await fetch(`http://localhost:30/api/templates/delete/${id}`, {
+            await fetch(`${process.env.URL}/api/templates/${id}`, {
             method: 'delete',
             body:    JSON.stringify(req.body),
             headers: { 'Content-Type': 'application/json' },
@@ -53,7 +54,7 @@ exports.templatesAction = async (req, res) => {
         const id = req.body.edit
         
         try{
-            await fetch(`http://localhost:30/api/templates/edit/${id}`, {
+            await fetch(`${process.env.URL}/api/templates/${id}`, {
             method: 'put',
             body:    JSON.stringify(req.body),
             headers: { 'Content-Type': 'application/json' },
