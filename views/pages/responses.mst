@@ -5,40 +5,37 @@
         <meta name="viewport" content="width=device-width, initial-scale=1,shrink-to-fit=no"/>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        <link rel="stylesheet" href="assets/css/templates.css"/>
+        <link rel="stylesheet" href="assets/css/responses.css"/>
     </head>
     <body>
     {{> header}}
         <div class="background">
             <div class="container-fluid">
                 <div class="col align-items-center">
-                    <div class="title">Gabaritos</div>
+                    <div class="title">Respostas</div>
                     <table class="table table-dark table-striped">
                         <tr>
                             <th>ID</th>
-                            <th>Matéria</th>
-                            <th>Classe</th>
+                            <th>ID do Aluno</th>
+                            <th>ID da Prova</th>
                             <th>Respostas</th>
-                            <th>Pesos</th>
                             <th>Ações</th>
                         </tr>
-                        {{#templates}}
+                        {{#responses}}
                         <tr>
                             <td>{{id}}</td>
-                            <td>{{name}}</td>
-                            <td>{{class}}</td>
+                            <td>{{owner}}</td>
+                            <td>{{templateID}}</td>
                             <td>{{responses}}</td>
-                            <td>{{weights}}</td>
                             <td>
                             <div class="row">
-                                <button type="button" class="btn" data-toggle="modal" onclick="document.getElementById('editButton').value = {{id}};" data-target="#edit">Editar</button>
                                     <form method="POST" style="margin-left: 10px;">
                                         <button type="submit" class="btn btn-danger" value={{id}} name="remove">Remover</button>
                                     </form>
                                 </td>
                             </div>
                         </tr>
-                        {{/templates}}
+                        {{/responses}}
                     </table>
                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#insert">Adicionar</button>
                 </div>
@@ -57,12 +54,12 @@
                     <div class="modal-body">
                         <form method="POST">
                             <div class="form-group">
-                                <label for="name">Nome da Matéria</label>
-                                <input type="text" name="name" class="form-control" id="name" placeholder="Matemática" required>
+                                <label for="owner">ID do Aluno</label>
+                                <input type="text" name="owner" class="form-control" id="owner" placeholder="1" required>
                             </div>
                             <div class="form-group">
-                                <label for="class">Classe</label>
-                                <input type="text" name="class" class="form-control" id="class" placeholder="7ºC" required>
+                                <label for="templateID">ID da Prova</label>
+                                <input type="text" name="templateID" class="form-control" id="templateID" placeholder="1" required>
                             </div>
                             <ol>
                                 <li>
@@ -70,10 +67,6 @@
                                         <div class="form-group">
                                             <label for="responses">Resposta</label>
                                             <input type="text" name="responses" class="form-control" id="responses" value="A" required>
-                                        </div>
-                                        <div class="form-group" style="margin-left: 5px;">
-                                            <label for="weights">Peso</label>
-                                            <input type="number" name="weights" class="form-control" id="weights" value="1" min="1" max="100" required>
                                         </div>
                                     </div>
                                 </li>
@@ -89,53 +82,10 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <h5 class="modal-title" id="edit">Modificar</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form method="POST">
-                            <div class="form-group">
-                                <label for="name">Nome da Matéria</label>
-                                <input type="text" name="name" class="form-control" id="name" placeholder="Matemática">
-                            </div>
-                            <div class="form-group">
-                                <label for="class">Classe</label>
-                                <input type="text" name="class" class="form-control" id="class" placeholder="7ºC">
-                            </div>
-                            <ol>
-                                <li>
-                                    <div class="row" style="margin-left: 3px; margin-right: 3px;" id="append2">
-                                        <div class="form-group">
-                                            <label for="responses">Resposta</label>
-                                            <input type="text" name="responses" class="form-control" id="responses" value="A" required>
-                                        </div>
-                                        <div class="form-group" style="margin-left: 5px;">
-                                            <label for="weights">Peso</label>
-                                            <input type="number" name="weights" class="form-control" id="weights" value="1" min="1" max="100" required>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ol>
-                            <button type="button" class="btn btn-success addmore2" style="padding: 2px;"><img src="img/more.png" alt="more" height="20px"></button>
 
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                                <button type="submit" class="btn btn-primary" id="editButton" name="edit">Modificar</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-        <script src="assets/js/template.js"></script>
+        <script src="assets/js/responses.js"></script>
     </body>
 </html>

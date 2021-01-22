@@ -25,7 +25,11 @@ const templateSchema = new mongoose.Schema({
         type: String,
         require: true
     },
-    answers: {
+    responses: {
+        type: Array,
+        require: true
+    },
+    weights: {
         type: Array,
         require: true
     },
@@ -39,14 +43,14 @@ const responseSchema = new mongoose.Schema({
         require: true
     },
     owner: {
-        type: String,
+        type: Number,
         require: true
     },
     templateID: {
         type: Number,
         require: true
     },
-    answers: {
+    responses: {
         type: Array,
         require: true
     },
@@ -63,9 +67,10 @@ const studentSchema = new mongoose.Schema({
         type: String,
         require: true
     },
-    grades: {
-        type: Object,
-        require: true
+    grade: {
+        type: Number,
+        require: true,
+        default: 0
     },
 });
 
