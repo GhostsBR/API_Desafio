@@ -17,7 +17,6 @@
 | http://localhost:30/api/templates/id | DELETE | Remover gabarito |
 |  |  |  |
 |  |  |  |
-|  |  |  |
 | http://localhost:30/api/responses | GET | Exibir os dados de todas as respostas |
 | http://localhost:30/api/responses/id | GET | Exibir os dados de uma resposta expecífica |
 | http://localhost:30/api/responses | POST | Adicionar uma nova resposta |
@@ -25,13 +24,11 @@
 | http://localhost:30/api/responses/id | DELETE | Remover uma resposta |
 |  |  |  |
 |  |  |  |
-|  |  |  |
 | http://localhost:30/api/students | GET | Exibir os dados de todos os alunos |
 | http://localhost:30/api/students/id | GET | Exibir os dados de um aluno expecífico |
 | http://localhost:30/api/students | POST | Adicionar um novo aluno |
 | http://localhost:30/api/students/id | PUT | Alterar um aluno |
 | http://localhost:30/api/students/id | DELETE | Remover um aluno |
-|  |  |  |
 |  |  |  |
 |  |  |  |
 | http://localhost:30/api/approved | GET | Lista de alunos aprovados |
