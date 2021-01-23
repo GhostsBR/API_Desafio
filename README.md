@@ -5,7 +5,7 @@
 ## Instalação:
 - Faça o download e instalação do [visual studio](https://code.visualstudio.com/).
 - Faça o download e instalação do [node](https://nodejs.org/en/).
-- Digite "node server.js" no terminal do [visual studio](https://code.visualstudio.com/) para iniciar (certifique-se de estar na pasta correta dentro do terminal).
+- Digite **node server.js** no terminal do [visual studio](https://code.visualstudio.com/) para iniciar (certifique-se de estar na pasta correta dentro do terminal).
 
 ## Rotas da API:
 | URL | Método | Descrição |
