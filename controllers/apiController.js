@@ -135,14 +135,18 @@ exports.responsesInsert = async (req, res) => {
                 }
     
                 const grade = (totalpoints / totalweight * 10);
-    
-                try {
-                    new response({id, owner:reqowner, templateID:reqtemplateID, grade, responses:reqResponses}).save();
-                } catch {
-                    res.json({error: true, type: 'Cannot insert into database'});
+                if(grade >= 0 && grade <= 10) {
+                    try {
+                        new response({id, owner:reqowner, templateID:reqtemplateID, grade, responses:reqResponses}).save();
+                    } catch {
+                        res.json({error: true, type: 'Cannot insert into database'});
+                        return;
+                    }
+                    updateStudentGrade(reqowner);
+                } else {
+                    res.json({error: true, type:'Invalid grade (need be between 0 and 10)'});
                     return;
                 }
-                updateStudentGrade(reqowner);
             } else {
                 res.json({error: true, type:'Invalid requirements'});
                 return;
@@ -240,10 +244,15 @@ exports.studentsInsert = async (req, res) => {
     let id = result.length + 1;
 
     if(reqname) {
-        try {
-            new student({id, name:reqname}).save();
-        } catch {
-            res.json({error: true, type: 'Cannot insert into database'});
+        if(result.length <= 100) {
+            try {
+                new student({id, name:reqname}).save();
+            } catch {
+                res.json({error: true, type: 'Cannot insert into database'});
+                return;
+            }
+        } else {
+            res.json({error: true, type:'Maximum members exceeded (100 members)'});
             return;
         }
     } else {
