@@ -11,7 +11,6 @@ router.get('/responses', homeController.responses);
 router.post('/responses', homeController.responsesAction);
 router.get('/students', homeController.students);
 router.post('/students', homeController.studentsAction);
-router.get('/grades', homeController.grades);
 router.get('/approved', homeController.approved);
 
 //API

@@ -212,10 +212,6 @@ exports.studentsAction = async (req, res) => {
     }
 }
 
-exports.grades = (req, res) => {
-   
-}
-
 exports.approved = (req, res) => {
     res.render('home');
 }

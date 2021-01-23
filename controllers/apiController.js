@@ -115,17 +115,38 @@ exports.responsesInsert = async (req, res) => {
     let reqResponses = req.body.responses;
 
     const result = await response.find();
+    const resultTemplate = await template.find({id:reqtemplateID})
     let id = result.length + 1;
 
-    if(reqowner && reqtemplateID && reqResponses) {
-        try {
-            new response({id, owner:reqowner, templateID:reqtemplateID, responses:reqResponses}).save();
-        } catch {
-            res.json({error: true, type: 'Cannot insert into database'});
+    if(resultTemplate.length > 0) {
+        if(reqowner && reqtemplateID && reqResponses) {
+            let totalpoints = 0
+            let totalweight = 0
+            
+            for(i=0; i < resultTemplate[0].responses.length; i++) {
+                totalweight += Number(resultTemplate[0].weights[i]);
+                if(typeof(reqResponses[i]) != 'undefined') {
+                    if(reqResponses[i].toUpperCase() == resultTemplate[0].responses[i].toUpperCase()) {
+                        totalpoints += (1 * resultTemplate[0].weights[i]);
+                    }
+                }
+            }
+
+            const grade = (totalpoints / totalweight * 10);
+
+            try {
+                new response({id, owner:reqowner, templateID:reqtemplateID, grade, responses:reqResponses}).save();
+            } catch {
+                res.json({error: true, type: 'Cannot insert into database'});
+                return;
+            }
+            
+        } else {
+            res.json({error: true, type:'Invalid requirements'});
             return;
         }
     } else {
-        res.json({error: true, type:'Invalid requirements'});
+        res.json({error: true, type:'Invalid template ID'});
         return;
     }
 

@@ -50,6 +50,10 @@ const responseSchema = new mongoose.Schema({
         type: Number,
         require: true
     },
+    grade: {
+        type: Number,
+        require: true
+    },
     responses: {
         type: Array,
         require: true

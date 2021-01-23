@@ -23,9 +23,6 @@
                           <a class="nav-link" href="/students">Alunos</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link" href="/grades">Notas</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" href="/approved">Aprovados</a>
                         </li>
                     </ul>
