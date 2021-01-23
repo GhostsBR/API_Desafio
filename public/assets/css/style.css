@@ -1,0 +1,54 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    margin: 0;
+    background-color: #212529;
+}
+
+.background {
+    padding: 10px;
+}
+
+.title{
+    color: white;
+    margin-bottom: 10px;
+    font-weight: bolder;
+    font-size: 30px;
+}
+
+.btn {
+    font-size: 14px;
+}
+
+.removemore {
+    margin-top: 35px;
+    margin-left: 5px;
+    height: 30px;
+    width: 30px;
+    background-color: rgb(218, 21, 21);
+    border: 0px;
+    border-radius: 5px;
+}
+
+.removemore:hover {
+    cursor: pointer;
+    background-color: rgb(122, 11, 11);
+}
+
+.removemore2 {
+    margin-top: 35px;
+    margin-left: 5px;
+    height: 30px;
+    width: 30px;
+    background-color: rgb(218, 21, 21);
+    border: 0px;
+    border-radius: 5px;
+}
+
+.removemore2:hover {
+    cursor: pointer;
+    background-color: rgb(122, 11, 11);
+}

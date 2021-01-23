@@ -212,6 +212,13 @@ exports.studentsAction = async (req, res) => {
     }
 }
 
-exports.approved = (req, res) => {
-    res.render('home');
+exports.approved = async (req, res) => {
+    let approvedJson = {
+        approved:[]
+    }
+    
+    await fetch(`${process.env.URL}/api/approved`)
+    .then(async res => approvedJson.approved = await res.json());
+
+    res.render('approved', approvedJson);
 }

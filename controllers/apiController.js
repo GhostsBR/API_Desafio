@@ -116,33 +116,39 @@ exports.responsesInsert = async (req, res) => {
 
     const result = await response.find();
     const resultTemplate = await template.find({id:reqtemplateID})
+    const resultStudent = await student.find({id:reqowner})
     let id = result.length + 1;
 
     if(resultTemplate.length > 0) {
-        if(reqowner && reqtemplateID && reqResponses) {
-            let totalpoints = 0
-            let totalweight = 0
-            
-            for(i=0; i < resultTemplate[0].responses.length; i++) {
-                totalweight += Number(resultTemplate[0].weights[i]);
-                if(typeof(reqResponses[i]) != 'undefined') {
-                    if(reqResponses[i].toUpperCase() == resultTemplate[0].responses[i].toUpperCase()) {
-                        totalpoints += (1 * resultTemplate[0].weights[i]);
+        if(resultStudent.length > 0) {
+            if(reqowner && reqtemplateID && reqResponses) {
+                let totalpoints = 0
+                let totalweight = 0
+                
+                for(i=0; i < resultTemplate[0].responses.length; i++) {
+                    totalweight += Number(resultTemplate[0].weights[i]);
+                    if(typeof(reqResponses[i]) != 'undefined') {
+                        if(reqResponses[i].toUpperCase() == resultTemplate[0].responses[i].toUpperCase()) {
+                            totalpoints += (1 * resultTemplate[0].weights[i]);
+                        }
                     }
                 }
-            }
-
-            const grade = (totalpoints / totalweight * 10);
-
-            try {
-                new response({id, owner:reqowner, templateID:reqtemplateID, grade, responses:reqResponses}).save();
-            } catch {
-                res.json({error: true, type: 'Cannot insert into database'});
+    
+                const grade = (totalpoints / totalweight * 10);
+    
+                try {
+                    new response({id, owner:reqowner, templateID:reqtemplateID, grade, responses:reqResponses}).save();
+                } catch {
+                    res.json({error: true, type: 'Cannot insert into database'});
+                    return;
+                }
+                updateStudentGrade(reqowner);
+            } else {
+                res.json({error: true, type:'Invalid requirements'});
                 return;
             }
-            
         } else {
-            res.json({error: true, type:'Invalid requirements'});
+            res.json({error: true, type:'Invalid student ID'});
             return;
         }
     } else {
@@ -300,6 +306,21 @@ exports.studentsDelete = async (req, res) => {
     res.json({error: false, type:'sucess'});
 }
 
-exports.approved = (req, res) => {
-    
+exports.approved = async (req, res) => {
+    const result = await student.find({grade:{$gt:6.99}});
+
+    res.json(result);
+}
+
+function updateStudentGrade(reqowner) {
+    setTimeout(async () => {
+        const findResponses = await response.find()
+        let totalGrade = 0
+        for(i=0; i < findResponses.length; i++) {
+            totalGrade += findResponses[i].grade;
+        }
+
+        const studentGrade = (totalGrade / findResponses.length)
+        student.updateOne({id:reqowner}, {$set: { grade:studentGrade}}, {upsert: true}, function(err){});
+    }, 200);
 }
