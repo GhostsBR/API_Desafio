@@ -27,7 +27,7 @@ router.post('/api/responses/', apiController.responsesInsert);
 router.put('/api/responses/:id', apiController.responsesEdit);
 router.delete('/api/responses/:id', apiController.responsesDelete);
 //Nota Final
-router.get('/api/grades/:name', apiController.gradesFind);
+router.get('/api/grades/:id', apiController.gradesFind);
 //Lista de Alunos
 router.get('/api/students', apiController.students);
 router.get('/api/students/:id', apiController.studentsFind);
