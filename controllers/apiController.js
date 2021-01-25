@@ -24,7 +24,7 @@ exports.templatesInsert = async (req, res) => {
 
     if(reqName && reqClass && reqResponses && reqWeights) {
         try {
-            new template({id, name:reqName, class:reqClass, responses:reqResponses, weights:reqWeights}).save();
+            new template({id, name:reqName, class:reqClass, responses:eval(reqResponses), weights:eval(reqWeights)}).save();
         } catch {
             res.json({error: true, type: 'Cannot insert into database'});
             return;
@@ -130,7 +130,7 @@ exports.responsesInsert = async (req, res) => {
                 const grade = await updateResponseGrade(resultTemplate, reqResponses);
                 if(grade >= 0 && grade <= 10) {
                     try {
-                        new response({id, owner:reqOwner, templateID:reqtemplateID, grade, responses:reqResponses}).save();
+                        new response({id, owner:reqOwner, templateID:reqtemplateID, grade, responses:eval(reqResponses)}).save();
                     } catch {
                         res.json({error: true, type: 'Cannot insert into database'});
                         return;
@@ -344,7 +344,7 @@ exports.studentsDelete = async (req, res) => {
 }
 
 exports.approved = async (req, res) => {
-    const result = await student.find({grade:{$gt:6.99}});
+    const result = await student.find({grade:{$gte:7}});
 
     res.json(result);
 }
