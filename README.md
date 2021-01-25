@@ -32,3 +32,6 @@
 |  |  |  |
 |  |  |  |
 | http://localhost:30/api/approved | GET | Lista de alunos aprovados |
+|  |  |  |
+|  |  |  |
+| http://localhost:30/api/grades/:id | GET | Exibir somente a nota final do aluno |
