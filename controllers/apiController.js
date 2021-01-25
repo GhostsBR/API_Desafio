@@ -106,7 +106,12 @@ exports.responses = async (req, res) => {
 exports.responsesFind = async (req, res) => {
     const result = await response.find({id: req.params.id});
 
-    res.json(result);
+    if(result > 0) {
+        res.json(result);
+    } else {
+        res.json({error: true, type:'Cannot found response (invalid id)'});
+        return;
+    }
 }
 
 exports.responsesInsert = async (req, res) => {
@@ -233,9 +238,14 @@ exports.responsesDelete = async (req, res) => {
 }
 
 exports.gradesFind = async (req, res) => {
-    const name = req.params.name
-    const result = await student.find({});
-
+    const id = req.params.id
+    const result = await student.find({id});
+    if(result.length > 0) {
+        res.json(result[0].grade);
+    } else {
+        res.json({error: true, type:'Cannot found student (wrong id)'});
+        return;
+    }
 }
 
 exports.students = async (req, res) => {
@@ -247,7 +257,12 @@ exports.students = async (req, res) => {
 exports.studentsFind = async (req, res) => {
     const result = await student.find({id: req.params.id});
 
-    res.json(result);
+    if(result > 0) {
+        res.json(result);
+    } else {
+        res.json({error: true, type:'Cannot found student (invalid id)'});
+        return;
+    }
 }
 
 exports.studentsInsert = async (req, res) => {
