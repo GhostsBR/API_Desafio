@@ -110,39 +110,27 @@ exports.responsesFind = async (req, res) => {
 }
 
 exports.responsesInsert = async (req, res) => {
-    let reqowner = req.body.owner;
+    let reqOwner = req.body.owner;
     let reqtemplateID = req.body.templateID;
     let reqResponses = req.body.responses;
 
     const result = await response.find();
     const resultTemplate = await template.find({id:reqtemplateID})
-    const resultStudent = await student.find({id:reqowner})
+    const resultStudent = await student.find({id:reqOwner})
     let id = result.length + 1;
 
     if(resultTemplate.length > 0) {
         if(resultStudent.length > 0) {
-            if(reqowner && reqtemplateID && reqResponses) {
-                let totalpoints = 0
-                let totalweight = 0
-                
-                for(i=0; i < resultTemplate[0].responses.length; i++) {
-                    totalweight += Number(resultTemplate[0].weights[i]);
-                    if(typeof(reqResponses[i]) != 'undefined') {
-                        if(reqResponses[i].toUpperCase() == resultTemplate[0].responses[i].toUpperCase()) {
-                            totalpoints += (1 * resultTemplate[0].weights[i]);
-                        }
-                    }
-                }
-    
-                const grade = (totalpoints / totalweight * 10);
+            if(reqOwner && reqtemplateID && reqResponses) {    
+                const grade = await updateResponseGrade(resultTemplate, reqResponses);
                 if(grade >= 0 && grade <= 10) {
                     try {
-                        new response({id, owner:reqowner, templateID:reqtemplateID, grade, responses:reqResponses}).save();
+                        new response({id, owner:reqOwner, templateID:reqtemplateID, grade, responses:reqResponses}).save();
                     } catch {
                         res.json({error: true, type: 'Cannot insert into database'});
                         return;
                     }
-                    updateStudentGrade(reqowner);
+                    updateStudentGrade(reqOwner);
                 } else {
                     res.json({error: true, type:'Invalid grade (need be between 0 and 10)'});
                     return;
@@ -184,12 +172,28 @@ exports.responsesEdit = async (req, res) => {
             reqResponses = req.body.responses;
         }
 
+        const resultTemplate = await template.find({id:reqtemplateID})
+        const resultStudent = await student.find({id:reqOwner})
 
         if(reqID) {
-            try {
-                response.updateOne({id:reqID}, {$set: { owner:reqOwner, templateID:reqtemplateID, responses:reqResponses}}, {upsert: true}, function(err){});
-            } catch {
-                res.json({error: true, type: 'Cannot update database'});
+            if(resultTemplate.length > 0) {
+                if(resultStudent.length > 0) {
+                    const grade = await updateResponseGrade(resultTemplate, reqResponses);
+
+                    try {
+                        response.updateOne({id:reqID}, {$set: { owner:reqOwner, templateID:reqtemplateID, responses:reqResponses, grade}}, {upsert: true}, function(err){});
+                    } catch {
+                        res.json({error: true, type: 'Cannot update database'});
+                        return;
+                    }
+
+                    updateStudentGrade(reqOwner);
+                } else {
+                    res.json({error: true, type:'Invalid student ID'});
+                    return;
+                }
+            } else {
+                res.json({error: true, type:'Invalid template ID'});
                 return;
             }
         } else {
@@ -203,13 +207,22 @@ exports.responsesEdit = async (req, res) => {
     }
 }
 
-exports.responsesDelete = (req, res) => {
+exports.responsesDelete = async (req, res) => {
     const id = req.params.id
     if(id) {
-        try {
-            response.deleteOne({id}, function (err) {});
-        } catch {
-            res.json({error: true, type:'Cannot remove into database'});
+        const result = await response.find({id});
+        if(result.length > 0) {
+            let reqOwner = result[0].owner;
+            try {
+                response.deleteOne({id}, function (err) {});
+            } catch {
+                res.json({error: true, type:'Cannot remove into database'});
+                return;
+            }
+    
+            updateStudentGrade(reqOwner)
+        } else {
+            res.json({error: true, type:'Invalid response'});
             return;
         }
     } else {
@@ -321,15 +334,34 @@ exports.approved = async (req, res) => {
     res.json(result);
 }
 
-function updateStudentGrade(reqowner) {
+function updateStudentGrade(reqOwner) {
     setTimeout(async () => {
         const findResponses = await response.find()
         let totalGrade = 0
-        for(i=0; i < findResponses.length; i++) {
-            totalGrade += findResponses[i].grade;
+        if(findResponses.length > 0) {
+            for(i=0; i < findResponses.length; i++) {
+                totalGrade += findResponses[i].grade;
+            }
+    
+            const studentGrade = (totalGrade / findResponses.length)
+            student.updateOne({id:reqOwner}, {$set: { grade:studentGrade}}, {upsert: true}, function(err){});
+        } else {
+            student.updateOne({id:reqOwner}, {$set: { grade:0}}, {upsert: true}, function(err){});
         }
-
-        const studentGrade = (totalGrade / findResponses.length)
-        student.updateOne({id:reqowner}, {$set: { grade:studentGrade}}, {upsert: true}, function(err){});
     }, 200);
+}
+
+function updateResponseGrade(resultTemplate, reqResponses) {
+    let totalpoints = 0
+    let totalweight = 0
+                
+    for(i=0; i < resultTemplate[0].responses.length; i++) {
+        totalweight += Number(resultTemplate[0].weights[i]);
+        if(typeof(reqResponses[i]) != 'undefined') {
+            if(reqResponses[i].toUpperCase() == resultTemplate[0].responses[i].toUpperCase()) {
+                totalpoints += (1 * resultTemplate[0].weights[i]);
+            }
+        }
+    }
+    return (totalpoints / totalweight * 10);
 }
