@@ -3,10 +3,8 @@
 ![SITE](https://i.imgur.com/ITk3z0Y.png)
 
 ## Instalação:
-- Faça o download e instalação do [visual studio](https://code.visualstudio.com/).
 - Faça o download e instalação do [node](https://nodejs.org/en/).
-- Digite **npm i** no terminal para instalar os modulos (certifique-se de estar na pasta correta dentro do terminal)..
-- Digite **node server.js** no terminal do [visual studio](https://code.visualstudio.com/) para iniciar (certifique-se de estar na pasta correta dentro do terminal).
+- Clique em **iniciar.cmd** para executar.
 
 ## Rotas da API:
 | URL | Método | Descrição |
