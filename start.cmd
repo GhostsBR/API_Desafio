@@ -1,4 +1,3 @@
-
 IF EXIST node_modules (
     node server.js
 ) ELSE (
