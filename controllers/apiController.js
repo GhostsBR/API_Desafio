@@ -399,7 +399,7 @@ exports.studentsDelete = async (req, res) => {
 }
 
 exports.approved = async (req, res) => {
-    const result = await student.find({grade:{$gte:7}});
+    const result = await student.find({grade:{$gt:7}});
 
     res.json(result);
 }
