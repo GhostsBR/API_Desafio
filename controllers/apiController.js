@@ -298,7 +298,7 @@ exports.responsesDelete = async (req, res) => {
 exports.gradesFind = async (req, res) => {
     const id = req.params.id
     const result = await student.find({id});
-    res.json(result);
+    res.json(result[0].grade);
 }
 
 exports.students = async (req, res) => {
