@@ -1,5 +1,5 @@
 const { json } = require('express');
-const { template, response, student } = require('../models/database');
+const { template, response, student, auto_increment } = require('../models/database');
 
 exports.templates = async (req, res) => {
     const result = await template.find();
@@ -19,12 +19,27 @@ exports.templatesInsert = async (req, res) => {
     let reqResponses = req.body.responses;
     let reqWeights = req.body.weights;
 
-    const result = await template.find();
-    let id = result.length + 1;
+    const result = await auto_increment.find({name:'templates'});
+    let id = 0;
+    if(result.length > 0) {
+        id = result[0].id + 1;
+        auto_increment.updateOne({name:'templates'}, {$set: {id}}, {upsert: true}, function(err){});
+    } else {
+        id = 1;
+        new auto_increment({name:'templates', id}).save(); 
+    }
+
+    if(reqResponses.includes(',') && reqResponses.includes('[') && reqResponses.includes(']')) {
+        reqResponses = eval(reqResponses)
+    }
+
+    if(reqWeights.includes(',') && reqWeights.includes('[') && reqWeights.includes(']')) {
+        reqWeights = eval(reqWeights)
+    }
 
     if(reqName && reqClass && reqResponses && reqWeights) {
         try {
-            new template({id, name:reqName, class:reqClass, responses:eval(reqResponses), weights:eval(reqWeights)}).save();
+            new template({id, name:reqName, class:reqClass, responses:reqResponses, weights:reqWeights}).save();
         } catch {
             res.json({error: true, type: 'Cannot insert into database'});
             return;
@@ -119,10 +134,22 @@ exports.responsesInsert = async (req, res) => {
     let reqtemplateID = req.body.templateID;
     let reqResponses = req.body.responses;
 
-    const result = await response.find();
     const resultTemplate = await template.find({id:reqtemplateID})
     const resultStudent = await student.find({id:reqOwner})
-    let id = result.length + 1;
+    const result = await auto_increment.find({name:'responses'});
+
+    let id = 0;
+    if(result.length > 0) {
+        id = result[0].id + 1;
+        auto_increment.updateOne({name:'responses'}, {$set: {id}}, {upsert: true}, function(err){});
+    } else {
+        id = 1;
+        new auto_increment({name:'responses', id}).save(); 
+    }
+
+    if(reqResponses.includes(',') && reqResponses.includes('[') && reqResponses.includes(']')) {
+        reqResponses = eval(reqResponses)
+    }
 
     if(resultTemplate.length > 0) {
         if(resultStudent.length > 0) {
@@ -130,7 +157,7 @@ exports.responsesInsert = async (req, res) => {
                 const grade = await updateResponseGrade(resultTemplate, reqResponses);
                 if(grade >= 0 && grade <= 10) {
                     try {
-                        new response({id, owner:reqOwner, templateID:reqtemplateID, grade, responses:eval(reqResponses)}).save();
+                        new response({id, owner:reqOwner, templateID:reqtemplateID, grade, responses:reqResponses}).save();
                     } catch {
                         res.json({error: true, type: 'Cannot insert into database'});
                         return;
@@ -268,8 +295,16 @@ exports.studentsFind = async (req, res) => {
 exports.studentsInsert = async (req, res) => {
     let reqname = req.body.name;
 
-    const result = await student.find();
-    let id = result.length + 1;
+    const result = await auto_increment.find({name:'students'});
+    
+    let id = 0;
+    if(result.length > 0) {
+        id = result[0].id + 1;
+        auto_increment.updateOne({name:'students'}, {$set: {id}}, {upsert: true}, function(err){});
+    } else {
+        id = 1;
+        new auto_increment({name:'students', id}).save(); 
+    }
 
     if(reqname) {
         if(result.length <= 100) {

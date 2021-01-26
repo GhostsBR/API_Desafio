@@ -79,3 +79,17 @@ const studentSchema = new mongoose.Schema({
 });
 
 exports.student = mongoose.model('student', studentSchema);
+
+const auto_incrementSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        require: true
+    },
+    id: {
+        type: Number,
+        require: true,
+        default: 0
+    },
+});
+
+exports.auto_increment = mongoose.model('auto_increment', auto_incrementSchema);
