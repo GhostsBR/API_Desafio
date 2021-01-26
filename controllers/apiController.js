@@ -29,13 +29,19 @@ exports.templatesInsert = async (req, res) => {
         new auto_increment({name:'templates', id}).save(); 
     }
 
-    if(reqResponses.includes(',') && reqResponses.includes('[') && reqResponses.includes(']')) {
+    if(reqResponses.includes(',') && reqResponses.includes('[') && reqResponses.includes(']') && reqResponses.includes("'") || reqResponses.includes('"')) {
         reqResponses = eval(reqResponses)
     }
 
     if(reqWeights.includes(',') && reqWeights.includes('[') && reqWeights.includes(']')) {
         reqWeights = eval(reqWeights)
     }
+
+    reqWeights.forEach((i, n) => {
+        if(Number(i) <= 0) {
+            reqWeights[n] = 1;
+        }
+    });
 
     if(reqName && reqClass && reqResponses && reqWeights) {
         try {
