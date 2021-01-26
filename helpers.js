@@ -1,1 +1,1 @@
-exports.defaultPageTitle = "Gerenciamento de Alunos";
+exports.defaultPageTitle = "Gerenciamento Escolar";
