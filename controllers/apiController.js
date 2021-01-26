@@ -411,13 +411,13 @@ function updateResponseGrade(resultTemplate, reqResponses) {
     let totalpoints = 0
     let totalweight = 0
                 
-    for(i=0; i < resultTemplate[0].responses.length; i++) {
+    for(i in resultTemplate[0].responses) {
         totalweight += Number(resultTemplate[0].weights[i]);
         if(typeof(reqResponses[i]) != 'undefined') {
             if(reqResponses[i].toUpperCase() == resultTemplate[0].responses[i].toUpperCase()) {
                 totalpoints += (1 * resultTemplate[0].weights[i]);
             }
-        }
+        }  
     }
     
     return (totalpoints / totalweight * 10);
