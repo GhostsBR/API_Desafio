@@ -303,19 +303,13 @@ exports.gradesFind = async (req, res) => {
 
 exports.students = async (req, res) => {
     const result = await student.find();
-
     res.json(result);
 }
 
 exports.studentsFind = async (req, res) => {
     const result = await student.find({id: req.params.id});
 
-    if(result > 0) {
-        res.json(result);
-    } else {
-        res.json({error: true, type:'Cannot found student (invalid id)'});
-        return;
-    }
+    res.json(result);
 }
 
 exports.studentsInsert = async (req, res) => {
