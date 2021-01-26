@@ -37,11 +37,17 @@ exports.templatesInsert = async (req, res) => {
         reqWeights = eval(reqWeights)
     }
 
-    reqWeights.forEach((i, n) => {
-        if(Number(i) <= 0) {
-            reqWeights[n] = 1;
+    if(typeof(reqWeights) == 'object' || typeof(reqWeights) == 'array') {
+        reqWeights.forEach((i, n) => {
+            if(Number(i) <= 0) {
+                reqWeights[n] = 1;
+            }
+        });
+    } else {
+        if(reqWeights >= 0) {
+            reqWeights = 1
         }
-    });
+    }
 
     if(reqName && reqClass && reqResponses && reqWeights) {
         try {
@@ -82,6 +88,26 @@ exports.templatesEdit = async (req, res) => {
         }
         if(req.body.weights) {
             reqWeights = req.body.weights;
+        }
+
+        if(reqResponses.includes(',') && reqResponses.includes('[') && reqResponses.includes(']')) {
+            reqResponses = eval(reqResponses)
+        }
+
+        if(reqWeights.includes(',') && reqWeights.includes('[') && reqWeights.includes(']')) {
+            reqWeights = eval(reqWeights)
+        }
+
+        if(typeof(reqWeights) == 'object' || typeof(reqWeights) == 'array') {
+            reqWeights.forEach((i, n) => {
+                if(Number(i) <= 0) {
+                    reqWeights[n] = 1;
+                }
+            });
+        } else {
+            if(reqWeights >= 0) {
+                reqWeights = 1
+            }
         }
 
         if(reqID) {
@@ -208,6 +234,10 @@ exports.responsesEdit = async (req, res) => {
         }
         if(req.body.responses) {
             reqResponses = req.body.responses;
+        }
+
+        if(reqResponses.includes(',') && reqResponses.includes('[') && reqResponses.includes(']')) {
+            reqResponses = eval(reqResponses)
         }
 
         const resultTemplate = await template.find({id:reqtemplateID})
