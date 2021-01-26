@@ -8,7 +8,7 @@ exports.templates = async (req, res) => {
 }
 
 exports.templatesFind = async (req, res) => {
-    const result = await template.find({id: req.params.id});
+    const result = await template.find({id:req.params.id});
 
     res.json(result);
 }
@@ -151,14 +151,9 @@ exports.responses = async (req, res) => {
 }
 
 exports.responsesFind = async (req, res) => {
-    const result = await response.find({id: req.params.id});
+    const result = await response.find({id:req.params.id});
 
-    if(result > 0) {
-        res.json(result);
-    } else {
-        res.json({error: true, type:'Cannot found response (invalid id)'});
-        return;
-    }
+    res.json(result);
 }
 
 exports.responsesInsert = async (req, res) => {
@@ -303,12 +298,7 @@ exports.responsesDelete = async (req, res) => {
 exports.gradesFind = async (req, res) => {
     const id = req.params.id
     const result = await student.find({id});
-    if(result.length > 0) {
-        res.json(result[0].grade);
-    } else {
-        res.json({error: true, type:'Cannot found student (wrong id)'});
-        return;
-    }
+    res.json(result);
 }
 
 exports.students = async (req, res) => {
