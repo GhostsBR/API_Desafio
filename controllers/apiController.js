@@ -389,9 +389,9 @@ function updateStudentGrade(reqOwner) {
         const findResponses = await response.find()
         let totalGrade = 0
         if(findResponses.length > 0) {
-            for(i=0; i < findResponses.length; i++) {
-                totalGrade += findResponses[i].grade;
-            }
+            findResponses.forEach(item => {
+                totalGrade += item.grade;
+            });
     
             const studentGrade = (totalGrade / findResponses.length)
             student.updateOne({id:reqOwner}, {$set: { grade:studentGrade}}, {upsert: true}, function(err){});
@@ -413,5 +413,6 @@ function updateResponseGrade(resultTemplate, reqResponses) {
             }
         }
     }
+    
     return (totalpoints / totalweight * 10);
 }
