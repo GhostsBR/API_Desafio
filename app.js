@@ -8,7 +8,10 @@ const bodyParser = require('body-parser');
 
 const { user } = require('./models/database');
 
-const router = require('./routes/index');
+const indexRouter = require('./routes/index');
+const templateRouter = require('./routes/templates');
+const responseRouter = require('./routes/responses');
+const studentsRouter = require('./routes/students');
 const helpers = require('./helpers');
 const errorHandler = require('./handlers/errorHandler');
 
@@ -40,7 +43,10 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/', router);
+app.use('/', indexRouter);
+app.use('/', templateRouter);
+app.use('/', responseRouter);
+app.use('/', studentsRouter);
 
 //Error 404
 app.use(errorHandler.pageNotFound);
